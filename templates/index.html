@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>카페서치 — 클로즈베타 신청</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --coffee: #4a2c17;
+      --espresso: #2b1a10;
+      --latte: #c8956c;
+      --cream: #fdf6ee;
+      --foam: #fff8f0;
+      --text: #2d1f14;
+      --muted: #8a7060;
+      --border: #e8d5c0;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* hero */
+    .hero {
+      width: 100%;
+      background: linear-gradient(135deg, var(--espresso) 0%, var(--coffee) 60%, #7a4a2a 100%);
+      color: #fff;
+      text-align: center;
+      padding: 72px 24px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='20' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1'/%3E%3C/svg%3E") repeat;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #ffe8cc;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 46px);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .hero h1 span { color: var(--latte); }
+    .hero p {
+      font-size: clamp(14px, 2vw, 17px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.8);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.7;
+      position: relative;
+    }
+
+    /* card */
+    .card {
+      background: var(--foam);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 44px 40px;
+      width: 100%;
+      max-width: 480px;
+      margin: -28px auto 0;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(74,44,23,0.12);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--espresso);
+    }
+    .card-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--coffee);
+      margin-bottom: 8px;
+    }
+    .input-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .input-wrap input[type="email"] {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      font-size: 15px;
+      font-family: inherit;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-wrap input[type="email"]:focus {
+      border-color: var(--latte);
+      box-shadow: 0 0 0 3px rgba(200,149,108,0.18);
+    }
+    .input-wrap input[type="email"]::placeholder { color: #c4ad98; }
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      pointer-events: none;
+    }
+
+    /* 개인정보 동의 체크박스 */
+    .agree-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      transition: border-color 0.2s;
+    }
+    .agree-wrap:has(input:checked) {
+      border-color: var(--latte);
+    }
+    .agree-wrap input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      margin-top: 1px;
+      accent-color: var(--coffee);
+      cursor: pointer;
+    }
+    .agree-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .agree-text strong { font-weight: 600; }
+    .policy-link {
+      color: var(--coffee);
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 500;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: inherit;
+      padding: 0;
+    }
+    .policy-link:hover { color: var(--latte); }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      color: #fff;
+      background: linear-gradient(135deg, var(--coffee), var(--latte));
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      margin-top: 4px;
+    }
+    .btn:hover { opacity: 0.92; }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .message {
+      margin-top: 16px;
+      padding: 13px 16px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      display: none;
+    }
+    .message.success {
+      background: #e8f5e8;
+      color: #2d6a2d;
+      border: 1px solid #b6d9b6;
+      display: block;
+    }
+    .message.error {
+      background: #fdecea;
+      color: #b91c1c;
+      border: 1px solid #f5c6c6;
+      display: block;
+    }
+
+    /* features */
+    .features {
+      width: 100%;
+      max-width: 480px;
+      margin: 32px auto 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 0 60px;
+    }
+    .feature {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 18px;
+    }
+    .feature-icon { font-size: 24px; margin-bottom: 8px; }
+    .feature-title { font-size: 13px; font-weight: 700; color: var(--espresso); margin-bottom: 4px; }
+    .feature-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    footer {
+      width: 100%;
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* 개인정보 처리방침 모달 */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(43,26,16,0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-header h3 { font-size: 16px; font-weight: 700; color: var(--espresso); }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--muted);
+      line-height: 1;
+      padding: 0 4px;
+    }
+    .modal-close:hover { color: var(--espresso); }
+    .modal-body {
+      padding: 20px 24px 24px;
+      overflow-y: auto;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.8;
+    }
+    .modal-body h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--espresso);
+      margin: 16px 0 6px;
+    }
+    .modal-body h4:first-child { margin-top: 0; }
+    .modal-body p { margin-bottom: 4px; }
+    .modal-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 12px;
+    }
+    .modal-body th, .modal-body td {
+      border: 1px solid var(--border);
+      padding: 7px 10px;
+      text-align: left;
+    }
+    .modal-body th { background: var(--cream); font-weight: 600; }
+
+    @media (max-width: 520px) {
+      .card { margin: -20px 16px 0; padding: 32px 24px; }
+      .features { padding: 0 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="hero-badge">☕ Closed Beta</div>
+    <h1>내 취향의 카페를<br><span>한 번에 찾다</span></h1>
+    <p>분위기, 원두, 메뉴, 위치까지 — 카페 통합검색 서비스가 곧 찾아옵니다. 먼저 경험해보세요.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">클로즈베타 신청</div>
+    <div class="card-sub">이메일을 남겨주시면 서비스 오픈 시 가장 먼저 초대 링크를 보내드려요.</div>
+
+    <form id="signup-form" novalidate>
+      <label for="email">이메일 주소</label>
+      <div class="input-wrap">
+        <span class="input-icon">✉️</span>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="example@email.com"
+          autocomplete="email"
+          required
+        />
+      </div>
+
+      <div class="agree-wrap">
+        <input type="checkbox" id="agree" name="agree" />
+        <div class="agree-text">
+          <strong>(필수)</strong> 카페서치의
+          <button type="button" class="policy-link" id="open-policy">개인정보 처리방침</button>에
+          동의합니다.
+        </div>
+      </div>
+
+      <button type="submit" class="btn" id="submit-btn">베타 신청하기 →</button>
+    </form>
+
+    <div class="message" id="message"></div>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🔍</div>
+      <div class="feature-title">통합 검색</div>
+      <div class="feature-desc">카페 이름, 메뉴, 분위기를 한 번에 검색</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🗺️</div>
+      <div class="feature-title">지도 탐색</div>
+      <div class="feature-desc">내 주변 카페를 지도에서 한눈에 확인</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">⭐</div>
+      <div class="feature-title">취향 필터</div>
+      <div class="feature-desc">노트북 가능, 반려동물 동반 등 세밀한 필터</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📸</div>
+      <div class="feature-title">분위기 큐레이션</div>
+      <div class="feature-desc">사진으로 보는 감성 카페 모아보기</div>
+    </div>
+  </div>
+
+  <footer>© 2026 카페서치 — 클로즈베타 신청 페이지</footer>
+
+  <!-- 개인정보 처리방침 모달 -->
+  <div class="modal-overlay" id="policy-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>개인정보 처리방침</h3>
+        <button class="modal-close" id="close-policy">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>카페서치(이하 "서비스")는 클로즈베타 신청 시 수집된 개인정보를 다음과 같이 처리합니다.</p>
+
+        <h4>1. 수집하는 개인정보 항목</h4>
+        <table>
+          <tr><th>항목</th><th>필수 여부</th></tr>
+          <tr><td>이메일 주소</td><td>필수</td></tr>
+        </table>
+
+        <h4>2. 개인정보 수집 및 이용 목적</h4>
+        <p>수집된 이메일 주소는 다음 목적으로만 이용됩니다.</p>
+        <p>· 클로즈베타 서비스 초대 안내 발송</p>
+        <p>· 서비스 오픈 관련 공지 발송</p>
+
+        <h4>3. 개인정보 보유 및 이용 기간</h4>
+        <p>서비스 정식 오픈 후 안내 이메일 발송 완료 시점까지 보유하며, 이후 지체 없이 파기합니다. 이용자가 동의를 철회하는 경우 즉시 파기합니다.</p>
+
+        <h4>4. 개인정보의 제3자 제공</h4>
+        <p>수집된 개인정보는 제3자에게 제공하지 않습니다.</p>
+
+        <h4>5. 동의 거부 권리</h4>
+        <p>개인정보 수집·이용 동의를 거부할 수 있으며, 이 경우 클로즈베타 신청이 불가합니다.</p>
+
+        <h4>6. 개인정보 파기 방법</h4>
+        <p>전자적 파일 형태로 저장된 개인정보는 복구 불가능한 방법으로 영구 삭제합니다.</p>
+
+        <h4>7. 문의</h4>
+        <p>개인정보 관련 문의는 서비스 운영팀으로 연락 주시기 바랍니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form    = document.getElementById('signup-form');
+    const btn     = document.getElementById('submit-btn');
+    const msg     = document.getElementById('message');
+    const modal   = document.getElementById('policy-modal');
+
+    // 모달 열기/닫기
+    document.getElementById('open-policy').addEventListener('click', () => {
+      modal.classList.add('open');
+    });
+    document.getElementById('close-policy').addEventListener('click', () => {
+      modal.classList.remove('open');
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('open');
+    });
+
+    // 폼 제출
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email  = document.getElementById('email').value.trim();
+      const agreed = document.getElementById('agree').checked;
+
+      msg.className = 'message';
+      msg.textContent = '';
+
+      if (!email) { showMsg('이메일 주소를 입력해주세요.', 'error'); return; }
+      if (!agreed) { showMsg('개인정보 처리방침에 동의해주세요.', 'error'); return; }
+
+      btn.disabled = true;
+      btn.textContent = '신청 중...';
+
+      try {
+        const res  = await fetch('/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, agreed }),
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          showMsg('🎉 ' + data.message, 'success');
+          form.reset();
+          btn.textContent = '신청 완료 ✓';
+        } else {
+          showMsg(data.message, 'error');
+          btn.disabled = false;
+          btn.textContent = '베타 신청하기 →';
+        }
+      } catch {
+        showMsg('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'error');
+        btn.disabled = false;
+        btn.textContent = '베타 신청하기 →';
+      }
+    });
+
+    function showMsg(text, type) {
+      msg.textContent = text;
+      msg.className = 'message ' + type;
+    }
+  </script>
+</body>
+</html>
