@@ -22,40 +22,57 @@
       width: 100vw;
     }
 
-    /* ── 왼쪽: 배경 이미지 패널 ── */
+    /* ── 왼쪽: 슬라이드쇼 패널 ── */
     .panel-photo {
       flex: 1 1 58%;
       position: relative;
       overflow: hidden;
+      background: #0f0d0a;
     }
-    .panel-photo img {
+    /* 배경 블러 이미지 */
+    .slide-bg {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center top;
+      object-position: center;
+      filter: blur(18px) brightness(0.35) saturate(0.6);
+      transform: scale(1.08);
+      transition: opacity 0.8s ease;
     }
-    /* 어두운 그라디언트 오버레이 */
+    /* 그라디언트 오버레이 */
     .panel-photo::after {
       content: '';
       position: absolute;
       inset: 0;
       background: linear-gradient(
-        135deg,
-        rgba(20, 18, 14, 0.62) 0%,
-        rgba(20, 30, 22, 0.45) 50%,
-        rgba(10, 15, 12, 0.55) 100%
+        160deg,
+        rgba(10, 8, 5, 0.55) 0%,
+        rgba(15, 13, 10, 0.3) 60%,
+        rgba(8, 10, 8, 0.65) 100%
       );
+      z-index: 1;
     }
     .photo-content {
       position: absolute;
       inset: 0;
-      z-index: 1;
+      z-index: 2;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 52px 56px;
+      align-items: center;
+      justify-content: center;
+      padding: 52px 48px 44px;
+      gap: 0;
+    }
+    .photo-footer {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      z-index: 3;
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.5px;
     }
     .badge {
       display: inline-flex;
@@ -71,8 +88,9 @@
       text-transform: uppercase;
       padding: 6px 14px;
       border-radius: 999px;
-      margin-bottom: 22px;
+      margin-bottom: 32px;
       width: fit-content;
+      align-self: flex-start;
     }
     .badge-dot {
       width: 6px; height: 6px;
@@ -84,34 +102,148 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.3; }
     }
-    .photo-title {
-      font-family: 'Noto Serif KR', serif;
-      font-size: clamp(30px, 3.2vw, 52px);
-      font-weight: 300;
-      color: #fff;
-      line-height: 1.35;
-      letter-spacing: -0.5px;
-      margin-bottom: 18px;
+
+    /* ── 슬라이드 영역 ── */
+    .slides-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      position: relative;
     }
-    .photo-title strong {
-      font-weight: 600;
+    .slide {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* ── 화살표 버튼 ── */
+    .arrow-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(6px);
+      color: rgba(255,255,255,0.85);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s, transform 0.15s;
+      user-select: none;
+    }
+    .arrow-btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-50%) scale(1.08);
+    }
+    .arrow-btn:active { transform: translateY(-50%) scale(0.95); }
+    .arrow-prev { left: 16px; }
+    .arrow-next { right: 16px; }
+
+    /* 폰 목업 */
+    .phone-frame {
+      width: 168px;
+      height: 340px;
+      border-radius: 30px;
+      border: 2.5px solid rgba(255,255,255,0.25);
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.4),
+        0 28px 56px rgba(0,0,0,0.6),
+        0 8px 16px rgba(0,0,0,0.3);
+      background: #111;
+      position: relative;
+    }
+    .phone-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
       display: block;
     }
-    .photo-desc {
-      font-size: 13.5px;
-      font-weight: 300;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.8;
-      max-width: 360px;
-    }
-    .photo-footer {
+    /* 상단 노치 */
+    .phone-frame::before {
+      content: '';
       position: absolute;
-      top: 40px;
-      right: 40px;
-      z-index: 1;
-      font-size: 11px;
-      color: rgba(255,255,255,0.35);
-      letter-spacing: 0.5px;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 54px;
+      height: 6px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 999px;
+      z-index: 10;
+    }
+
+    /* 슬라이드 텍스트 */
+    .slide-text {
+      text-align: center;
+      max-width: 300px;
+    }
+    .slide-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(168,196,162,0.85);
+      margin-bottom: 8px;
+    }
+    .slide-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(17px, 1.8vw, 22px);
+      font-weight: 400;
+      color: #fff;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .slide-desc {
+      font-size: 12.5px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.75;
+    }
+
+    /* 도트 인디케이터 */
+    .slide-dots {
+      display: flex;
+      gap: 7px;
+      margin-top: 4px;
+      align-self: center;
+    }
+    .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transition: background 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+    .dot.active {
+      background: rgba(255,255,255,0.85);
+      transform: scale(1.3);
+    }
+
+    /* ── 모바일 ── */
+    @keyframes pulse2 {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
 
     /* ── 오른쪽: 폼 패널 ── */
@@ -359,7 +491,12 @@
     @media (max-width: 700px) {
       html, body { overflow: auto; }
       .layout { flex-direction: column; height: auto; }
-      .panel-photo { flex: none; height: 50vh; }
+      .panel-photo { flex: none; height: 56vh; min-height: 400px; }
+      .photo-content { padding: 32px 28px 28px; }
+      .badge { margin-bottom: 20px; }
+      .phone-frame { width: 130px; height: 265px; }
+      .slide-title { font-size: 16px; }
+      .slide-desc { font-size: 12px; }
       .panel-form {
         flex: none;
         padding: 36px 28px 80px;
@@ -373,20 +510,80 @@
 
 <div class="layout">
 
-  <!-- 왼쪽: 사진 패널 -->
+  <!-- 왼쪽: 슬라이드쇼 패널 -->
   <div class="panel-photo">
-    <img src="/static/bg.jpg" alt="카페 배경" />
+    <!-- 블러 배경 (JS로 src 교체) -->
+    <img class="slide-bg" id="slide-bg" src="/static/coffee_choice.png" alt="" />
+
     <div class="photo-footer">커피집 © 2026</div>
+
     <div class="photo-content">
       <div class="badge">
         <span class="badge-dot"></span>
         Closed Beta
       </div>
-      <h1 class="photo-title">
-        좋아하는 카페를<br>
-        <strong>한 번에 찾는 방법</strong>
-      </h1>
-      <p class="photo-desc">분위기, 메뉴, 위치, 원두까지 — 카페 통합검색 서비스 커피집이 곧 찾아옵니다.</p>
+
+      <div class="slides-area">
+        <button class="arrow-btn arrow-prev" id="arrow-prev" aria-label="이전">&#8592;</button>
+        <button class="arrow-btn arrow-next" id="arrow-next" aria-label="다음">&#8594;</button>
+
+        <!-- 슬라이드 1: 취향으로 검색 -->
+        <div class="slide active" data-index="0">
+          <div class="phone-frame">
+            <img src="/static/coffee_choice.png" alt="취향 필터 검색" />
+          </div>
+          <div class="slide-text">
+            <div class="slide-label">CHOICE</div>
+            <div class="slide-title">취향으로 검색하기</div>
+            <div class="slide-desc">지역, 분위기, 키워드 필터로<br>딱 맞는 카페를 골라보세요</div>
+          </div>
+        </div>
+
+        <!-- 슬라이드 2: 나만의 큐레이션 -->
+        <div class="slide" data-index="1">
+          <div class="phone-frame">
+            <img src="/static/coffee_foryou.png" alt="FOR YOU 큐레이션" />
+          </div>
+          <div class="slide-text">
+            <div class="slide-label">FOR YOU</div>
+            <div class="slide-title">나만을 위한 큐레이션</div>
+            <div class="slide-desc">독서, 작업, 데이트 등 상황에 맞는<br>카페를 골라서 추천해드려요</div>
+          </div>
+        </div>
+
+        <!-- 슬라이드 3: 지도로 탐색 -->
+        <div class="slide" data-index="2">
+          <div class="phone-frame">
+            <img src="/static/coffee_map.png" alt="지도 탐색" />
+          </div>
+          <div class="slide-text">
+            <div class="slide-label">MAP</div>
+            <div class="slide-title">지도로 탐색하기</div>
+            <div class="slide-desc">내 주변 카페를 지도에서<br>한눈에 확인하세요</div>
+          </div>
+        </div>
+
+        <!-- 슬라이드 4: 카페 상세 -->
+        <div class="slide" data-index="3">
+          <div class="phone-frame">
+            <img src="/static/coffee_detail.png" alt="카페 상세 정보" />
+          </div>
+          <div class="slide-text">
+            <div class="slide-label">DETAIL</div>
+            <div class="slide-title">모든 정보 한 번에</div>
+            <div class="slide-desc">분위기, 메뉴, 영업시간, 위치까지<br>필요한 모든 정보를 확인하세요</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 도트 인디케이터 -->
+      <div class="slide-dots">
+        <div class="dot active" data-target="0"></div>
+        <div class="dot" data-target="1"></div>
+        <div class="dot" data-target="2"></div>
+        <div class="dot" data-target="3"></div>
+      </div>
     </div>
   </div>
 
@@ -516,6 +713,57 @@
     msg.textContent = text;
     msg.className = 'message ' + type;
   }
+
+  // ── 슬라이드쇼 ──
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+  const bgEl   = document.getElementById('slide-bg');
+  const bgImgs = [
+    '/static/coffee_choice.png',
+    '/static/coffee_foryou.png',
+    '/static/coffee_map.png',
+    '/static/coffee_detail.png',
+  ];
+  let current = 0;
+  let timer;
+  const INTERVAL = 2500;
+
+  function goTo(idx) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (idx + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    bgEl.style.opacity = '0';
+    setTimeout(() => {
+      bgEl.src = bgImgs[current];
+      bgEl.style.opacity = '1';
+    }, 150);
+  }
+
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), INTERVAL);
+  }
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      goTo(parseInt(dot.dataset.target));
+      startTimer();
+    });
+  });
+
+  document.getElementById('arrow-prev').addEventListener('click', () => {
+    goTo(current - 1);
+    startTimer();
+  });
+  document.getElementById('arrow-next').addEventListener('click', () => {
+    goTo(current + 1);
+    startTimer();
+  });
+
+  bgEl.style.transition = 'opacity 0.25s ease';
+  startTimer();
 </script>
 </body>
 </html>

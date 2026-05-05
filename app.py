@@ -5,6 +5,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 SIGNUPS_FILE = os.path.join(os.path.dirname(__file__), 'signups.csv')
 
