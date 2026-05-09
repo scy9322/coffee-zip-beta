@@ -273,10 +273,10 @@
         </div>
 
         <div class="slide" data-index="1">
-          <div class="phone-frame"><img src="static/coffee_foryou.png" alt="FOR YOU 큐레이션" /></div>
+          <div class="phone-frame"><img src="static/coffee_foryou_new.png" alt="FOR YOU 큐레이션" /></div>
           <div class="slide-text">
             <div class="slide-label">FOR YOU</div>
-            <div class="slide-title">나만을 위한 큐레이션</div>
+            <div class="slide-title">취향 맞춤 큐레이션</div>
             <div class="slide-desc">독서, 작업, 데이트 등 상황에 맞는<br>카페를 골라서 추천해드려요</div>
           </div>
         </div>
@@ -298,6 +298,15 @@
             <div class="slide-desc">분위기, 메뉴, 영업시간, 위치까지<br>필요한 모든 정보를 확인하세요</div>
           </div>
         </div>
+
+        <div class="slide" data-index="4">
+          <div class="phone-frame"><img src="static/coffee_filter.gif" alt="키워드 필터" /></div>
+          <div class="slide-text">
+            <div class="slide-label">FILTER</div>
+            <div class="slide-title">57가지 카페 전용 키워드</div>
+            <div class="slide-desc">분위기부터 메뉴, 뷰, 색감까지<br>카페에 딱 맞는 키워드로 검색하세요</div>
+          </div>
+        </div>
       </div>
 
       <div class="slide-dots">
@@ -305,6 +314,7 @@
         <div class="dot" data-target="1"></div>
         <div class="dot" data-target="2"></div>
         <div class="dot" data-target="3"></div>
+        <div class="dot" data-target="4"></div>
       </div>
     </div>
   </div>
@@ -433,9 +443,10 @@
   const bgEl   = document.getElementById('slide-bg');
   const bgImgs = [
     'static/coffee_choice.png',
-    'static/coffee_foryou.png',
+    'static/coffee_foryou_new.png',
     'static/coffee_map.png',
     'static/coffee_detail.png',
+    'static/coffee_filter.gif',
   ];
   let current = 0;
   let timer;
